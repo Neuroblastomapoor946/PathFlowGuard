@@ -1,0 +1,9 @@
+{
+  "case_id": "CASE-2026-102",
+  "slide_id": "SLIDE-102",
+  "site_id": "SITE-EDGE-BETA",
+  "objective_power": 40,
+  "file_bytes": 0,
+  "package_path": "../packages/review-package",
+  "notes": "Expected review lane sample due to focus score."
+}

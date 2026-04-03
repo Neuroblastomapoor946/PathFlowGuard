@@ -1,0 +1,9 @@
+{
+  "case_id": "CASE-2026-103",
+  "slide_id": "SLIDE-103",
+  "site_id": "SITE-EDGE-GAMMA",
+  "objective_power": 40,
+  "file_bytes": 0,
+  "package_path": "../packages/reject-package",
+  "notes": "Expected reject lane sample due to multiple severe QC failures."
+}

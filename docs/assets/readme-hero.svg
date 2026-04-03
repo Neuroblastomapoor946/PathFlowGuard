@@ -1,0 +1,56 @@
+<svg width="1200" height="620" viewBox="0 0 1200 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="40" x2="1080" y2="580" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17324C"/>
+      <stop offset="1" stop-color="#0F243A"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="262" y1="164" x2="346" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFB179"/>
+      <stop offset="1" stop-color="#D95B30"/>
+    </linearGradient>
+  </defs>
+  <rect x="24" y="24" width="1152" height="572" rx="36" fill="url(#bg)"/>
+  <circle cx="1030" cy="118" r="142" fill="#FFFFFF" fill-opacity="0.05"/>
+  <circle cx="170" cy="516" r="190" fill="#D95B30" fill-opacity="0.07"/>
+
+  <text x="72" y="92" fill="#FFCEBA" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="4">GREGORIGIN</text>
+  <text x="72" y="154" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="54" font-weight="700">PathFlow Guard</text>
+  <text x="72" y="198" fill="#C9D7E6" font-family="Segoe UI, Arial, sans-serif" font-size="25">Digital pathology QC, SVS sampling, manifesting, and routed ingestion.</text>
+  <text x="72" y="234" fill="#C9D7E6" font-family="Segoe UI, Arial, sans-serif" font-size="25">Executable Python app with native-ready C++ and Rust extensions.</text>
+
+  <rect x="72" y="286" width="214" height="98" rx="24" fill="#F7F7FB" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.12"/>
+  <text x="98" y="326" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Problem</text>
+  <text x="98" y="356" fill="#D8E6F4" font-family="Segoe UI, Arial, sans-serif" font-size="17">Manual rescans, hidden artifacts,</text>
+  <text x="98" y="380" fill="#D8E6F4" font-family="Segoe UI, Arial, sans-serif" font-size="17">bandwidth waste, weak traceability</text>
+
+  <rect x="312" y="286" width="214" height="98" rx="24" fill="#FFFFFF"/>
+  <text x="338" y="326" fill="#17324C" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Input</text>
+  <text x="338" y="356" fill="#5B687A" font-family="Segoe UI, Arial, sans-serif" font-size="17">Request JSON, tile folders,</text>
+  <text x="338" y="380" fill="#5B687A" font-family="Segoe UI, Arial, sans-serif" font-size="17">or OpenSlide-backed SVS files</text>
+
+  <rect x="552" y="286" width="214" height="98" rx="24" fill="url(#accent)"/>
+  <text x="578" y="326" fill="#FFF7F3" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Engine</text>
+  <text x="578" y="356" fill="#FFF0EA" font-family="Segoe UI, Arial, sans-serif" font-size="17">Metric extraction, rules,</text>
+  <text x="578" y="380" fill="#FFF0EA" font-family="Segoe UI, Arial, sans-serif" font-size="17">manifests, audit persistence</text>
+
+  <rect x="792" y="286" width="312" height="98" rx="24" fill="#F7F7FB" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.12"/>
+  <text x="818" y="326" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Output</text>
+  <text x="818" y="356" fill="#D8E6F4" font-family="Segoe UI, Arial, sans-serif" font-size="17">Accepted, review, rejected lanes;</text>
+  <text x="818" y="380" fill="#D8E6F4" font-family="Segoe UI, Arial, sans-serif" font-size="17">SQLite jobs, audit events, JSON API</text>
+
+  <path d="M286 334H308" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="308,334 294,324 294,344" fill="#FFFFFF"/>
+  <path d="M526 334H548" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="548,334 534,324 534,344" fill="#FFFFFF"/>
+  <path d="M766 334H788" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="788,334 774,324 774,344" fill="#FFFFFF"/>
+
+  <rect x="72" y="446" width="1032" height="100" rx="26" fill="#FFFFFF" fill-opacity="0.06" stroke="#FFFFFF" stroke-opacity="0.14"/>
+  <rect x="102" y="474" width="152" height="42" rx="21" fill="#21725E" fill-opacity="0.18" stroke="#21725E" stroke-opacity="0.36"/>
+  <text x="142" y="501" fill="#BDE5DA" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">ACCEPT</text>
+  <rect x="304" y="474" width="152" height="42" rx="21" fill="#AF6A17" fill-opacity="0.18" stroke="#AF6A17" stroke-opacity="0.36"/>
+  <text x="340" y="501" fill="#F1DEB8" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">REVIEW</text>
+  <rect x="506" y="474" width="152" height="42" rx="21" fill="#A84231" fill-opacity="0.18" stroke="#A84231" stroke-opacity="0.36"/>
+  <text x="546" y="501" fill="#F0C6BF" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">REJECT</text>
+  <text x="716" y="501" fill="#D8E6F4" font-family="Segoe UI, Arial, sans-serif" font-size="20">Windows executable, dashboard, API, CI/CD, and quality docs included</text>
+</svg>

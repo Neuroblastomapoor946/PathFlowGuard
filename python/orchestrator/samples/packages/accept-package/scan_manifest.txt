@@ -1,0 +1,4 @@
+scanner=hamamatsu-nz-360
+stain=H&E
+operator=tech-01
+

@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PathFlow Guard Manual</title>
+  <meta
+    name="description"
+    content="Comprehensive illustrated operator and technical manual for PathFlow Guard."
+  >
+  <style>
+    :root {
+      --bg: #efe8db;
+      --deep: #10253d;
+      --deep-2: #0a1a2d;
+      --paper: rgba(255, 252, 247, 0.94);
+      --paper-strong: rgba(255, 255, 255, 0.98);
+      --line: rgba(22, 34, 55, 0.12);
+      --ink: #162237;
+      --muted: #576476;
+      --accent: #d66034;
+      --teal: #1f7560;
+      --gold: #af7625;
+      --danger: #a74235;
+      --shadow: 0 18px 60px rgba(18, 29, 45, 0.15);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --sidebar-width: 320px;
+      --content-width: 1240px;
+      --sans: "Aptos", "Segoe UI", "Bahnschrift", sans-serif;
+      --mono: "Cascadia Code", "Consolas", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at top right, rgba(214, 96, 52, 0.12), transparent 22%),
+        radial-gradient(circle at 0% 100%, rgba(31, 117, 96, 0.12), transparent 28%),
+        linear-gradient(180deg, #f8f4ed 0%, var(--bg) 100%);
+    }
+    a { color: inherit; }
+    code, pre { font-family: var(--mono); }
+    img { display: block; max-width: 100%; }
+
+    .mobile-bar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      color: #edf5ff;
+      background: rgba(10, 26, 45, 0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .mobile-bar button {
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      color: inherit;
+      padding: 9px 14px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(284px, var(--sidebar-width)) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow: auto;
+      padding: 20px 18px 22px 22px;
+      color: #edf4ff;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 28%),
+        linear-gradient(180deg, rgba(16, 37, 61, 0.98), rgba(10, 26, 45, 0.98));
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .brand {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 20px;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .brand svg { width: 52px; height: 52px; }
+    .brand strong {
+      display: block;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .brand span {
+      display: block;
+      font-size: 0.84rem;
+      color: rgba(237, 244, 255, 0.7);
+    }
+    .sidebar h1 {
+      margin: 20px 0 10px;
+      font-size: 2rem;
+      line-height: 0.96;
+      letter-spacing: -0.03em;
+    }
+    .sidebar .intro {
+      margin: 0 0 18px;
+      color: rgba(237, 244, 255, 0.74);
+      line-height: 1.62;
+      font-size: 0.95rem;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .pill {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(214, 96, 52, 0.16);
+      color: #ffd9c4;
+    }
+    .sidebar-card {
+      padding: 14px 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      margin-bottom: 18px;
+    }
+    .sidebar-card strong { display: block; margin-bottom: 8px; }
+    .sidebar-card p,
+    .sidebar-card ul {
+      margin: 0;
+      color: rgba(237, 244, 255, 0.74);
+      line-height: 1.55;
+      font-size: 0.9rem;
+    }
+    .sidebar-card ul { padding-left: 18px; }
+    .sidebar-nav a {
+      display: block;
+      padding: 10px 12px;
+      margin: 2px 0;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      border-radius: 0 14px 14px 0;
+      color: rgba(237, 244, 255, 0.74);
+      transition: 140ms ease;
+    }
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-left-color: var(--accent);
+      transform: translateX(2px);
+    }
+    .sidebar-links {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .sidebar-links a {
+      color: rgba(237, 244, 255, 0.74);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .content { padding: 28px; }
+    .content-inner {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      display: grid;
+      gap: 22px;
+    }
+
+    .panel,
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .panel { padding: 28px; }
+    .hero {
+      padding: 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .hero::before,
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at top right, rgba(214, 96, 52, 0.08), transparent 24%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+    }
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    h2 {
+      margin: 0 0 12px;
+      line-height: 0.98;
+      letter-spacing: -0.045em;
+      font-size: clamp(2rem, 3vw, 3.3rem);
+    }
+    h3 { margin: 0 0 10px; font-size: 1.08rem; }
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    p + p { margin-top: 10px; }
+    .lede { max-width: 66ch; font-size: 1.04rem; }
+    .tag-row,
+    .chapter-links,
+    .decision-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .tag,
+    .chapter-links a {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(16, 37, 61, 0.08);
+      border: 1px solid rgba(16, 37, 61, 0.1);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+
+    .hero-stats,
+    .card-grid,
+    .steps,
+    .callout-grid,
+    .split-grid,
+    .matrix-grid,
+    .table-card-grid,
+    .mini-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .hero-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 18px; }
+    .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .callout-grid,
+    .split-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .matrix-grid { grid-template-columns: 1.1fr 0.9fr; }
+    .table-card-grid { grid-template-columns: 1.2fr 0.8fr; }
+    .mini-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .stat,
+    .card,
+    .step,
+    .callout,
+    .guide,
+    .mini-card {
+      position: relative;
+      z-index: 1;
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--paper-strong);
+    }
+    .stat strong,
+    .mini-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.6rem;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--ink);
+    }
+    .kicker {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(214, 96, 52, 0.1);
+      color: var(--accent);
+    }
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    .section-header .small { max-width: 54ch; font-size: 0.94rem; }
+
+    .figure,
+    .asset-figure {
+      position: relative;
+      z-index: 1;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 243, 234, 0.95));
+      padding: 20px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    }
+    .figure svg { width: 100%; height: auto; display: block; }
+    .asset-figure { padding: 0; overflow: hidden; }
+    .asset-figure figcaption,
+    .figure figcaption {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.62;
+    }
+    .asset-figure figcaption { padding: 14px 18px 18px; margin-top: 0; }
+
+    .note,
+    .warning {
+      position: relative;
+      z-index: 1;
+      padding: 15px 18px;
+      border-radius: var(--radius-md);
+      line-height: 1.65;
+    }
+    .note {
+      background: rgba(31, 117, 96, 0.08);
+      border: 1px solid rgba(31, 117, 96, 0.18);
+      color: #205c4c;
+    }
+    .warning {
+      background: rgba(214, 96, 52, 0.08);
+      border: 1px solid rgba(214, 96, 52, 0.16);
+      color: #8c3619;
+    }
+
+    .decision {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid transparent;
+    }
+    .decision.accept {
+      background: rgba(31, 117, 96, 0.12);
+      border-color: rgba(31, 117, 96, 0.2);
+      color: var(--teal);
+    }
+    .decision.review {
+      background: rgba(175, 118, 37, 0.12);
+      border-color: rgba(175, 118, 37, 0.22);
+      color: var(--gold);
+    }
+    .decision.reject {
+      background: rgba(167, 66, 53, 0.1);
+      border-color: rgba(167, 66, 53, 0.18);
+      color: var(--danger);
+    }
+
+    .code-block {
+      position: relative;
+      z-index: 1;
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      background: #0e192a;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #eef4ff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    .code-block code {
+      white-space: pre;
+      font-size: 0.92rem;
+      line-height: 1.68;
+    }
+
+    .table-wrap {
+      position: relative;
+      z-index: 1;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--paper-strong);
+    }
+    table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+    }
+    th,
+    td {
+      padding: 14px 16px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+      line-height: 1.58;
+      color: var(--muted);
+    }
+    th {
+      background: rgba(16, 37, 61, 0.05);
+      color: var(--ink);
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    td strong { color: var(--ink); }
+    tr:last-child td { border-bottom: none; }
+    ul, ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+    li + li { margin-top: 8px; }
+    .footer {
+      padding: 8px 10px 26px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .matrix-grid,
+      .table-card-grid,
+      .split-grid,
+      .callout-grid,
+      .card-grid { grid-template-columns: 1fr; }
+      .mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .mobile-bar { display: flex; }
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 90;
+        width: min(88vw, 340px);
+        transform: translateX(-100%);
+        transition: transform 180ms ease;
+      }
+      body.sidebar-open .sidebar { transform: translateX(0); }
+      .content { padding: 0 18px 22px; }
+      .content-inner { padding-top: 18px; }
+    }
+    @media (max-width: 720px) {
+      .hero,
+      .panel { padding: 22px; }
+      .hero,
+      .hero-stats,
+      .mini-grid,
+      .steps { grid-template-columns: 1fr; }
+      .section-header { display: block; }
+      .section-header .small { margin-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-bar">
+    <strong>PathFlow Guard Manual</strong>
+    <button type="button" data-sidebar-toggle>Sections</button>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="https://www.gregorigin.com" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 88 88" aria-hidden="true">
+          <defs>
+            <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffb179"></stop>
+              <stop offset="100%" stop-color="#d66034"></stop>
+            </linearGradient>
+          </defs>
+          <rect x="5" y="5" width="78" height="78" rx="24" fill="#ffffff" opacity="0.08"></rect>
+          <path d="M27 25h18c8.5 0 15 6.1 15 15 0 9-6.5 15-15 15H35v11H27V25zm8 8v14h10c4.4 0 7-2.8 7-7s-2.6-7-7-7H35z" fill="url(#brandGradient)"></path>
+          <path d="M47 61c0-9.3 7.1-16.3 16.6-16.3 4.5 0 8.5 1.3 11.4 3.7l-4.7 5.7c-1.7-1.4-3.9-2.2-6.5-2.2-5.1 0-8.9 3.8-8.9 9.1 0 5.4 3.6 9.2 9.4 9.2 1.6 0 3-.2 4.1-.8v-4.3H63v-6.7h13.2v15.7c-3.9 2.8-8.1 4-13.1 4C54.1 77.8 47 70.8 47 61z" fill="#ffffff"></path>
+        </svg>
+        <div>
+          <strong>GregOrigin</strong>
+          <span>Illustrated product manual</span>
+        </div>
+      </a>
+
+      <h1>PathFlow Guard</h1>
+      <p class="intro">
+        Edge-first pathology QC, deterministic intake policy, auditable routing, and deployable
+        Windows packaging in one repository. This page is the operator guide, system map, and
+        technical reference.
+      </p>
+
+      <div class="meta">
+        <span class="pill">Python runtime</span>
+        <span class="pill">C++ + Rust companions</span>
+        <span class="pill">SVS aware</span>
+      </div>
+
+      <div class="sidebar-card">
+        <strong>What this manual covers</strong>
+        <ul>
+          <li>How to run PathFlow Guard from source or packaged EXE</li>
+          <li>How requests are resolved, evaluated, persisted, and routed</li>
+          <li>How raster tiles and whole-slide sampling work</li>
+          <li>How operators inspect jobs, manifests, and audit records</li>
+        </ul>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Section navigation">
+        <a href="#overview">Overview</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#requests">Request Model</a>
+        <a href="#decisions">Decision Engine</a>
+        <a href="#imaging">Imaging</a>
+        <a href="#interfaces">Interfaces</a>
+        <a href="#workspace">Workspace</a>
+        <a href="#build">Build + Deploy</a>
+        <a href="#quality">Verification + Quality</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+        <a href="#reference">Reference</a>
+      </nav>
+
+      <div class="sidebar-links">
+        <a href="../../README.md">README.md</a>
+        <a href="../architecture.md">Architecture notes</a>
+        <a href="../research.md">Research basis</a>
+        <a href="../quality/software-lifecycle.md">Software lifecycle</a>
+        <a href="../quality/traceability-matrix.md">Traceability matrix</a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="content-inner">
+        <section class="hero" id="overview">
+          <div>
+            <p class="eyebrow">Operator And Technical Manual</p>
+            <h2>Catch low-quality slide packages before they become downstream cost, noise, or risk.</h2>
+            <p class="lede">
+              PathFlow Guard is a workflow-support application for digital pathology intake. It
+              evaluates slide packages before cloud upload, extracts quality metrics from raster
+              tiles or OpenSlide-backed whole-slide images, assigns an <code>accept</code>,
+              <code>review</code>, or <code>reject</code> outcome, writes deterministic manifests,
+              and stores an audit trail that can be re-read later.
+            </p>
+            <p class="lede">
+              The shipping workflow today is Python-centered. The repository also includes a C++
+              QC core, a Rust integrity attestor, an Azure deployment skeleton, CI/CD, and
+              regulated-development documentation.
+            </p>
+
+            <div class="tag-row">
+              <span class="tag">CLI + Dashboard + JSON API</span>
+              <span class="tag">SQLite job history</span>
+              <span class="tag">OpenSlide runtime discovery</span>
+              <span class="tag">PyInstaller Windows EXE</span>
+              <span class="tag">Deterministic BLAKE2b manifests</span>
+            </div>
+
+            <div class="hero-stats">
+              <article class="stat">
+                <strong>3</strong>
+                <p>routing lanes: accept, review, reject</p>
+              </article>
+              <article class="stat">
+                <strong>7</strong>
+                <p>top-level workspace outputs created during normal operation</p>
+              </article>
+              <article class="stat">
+                <strong>2</strong>
+                <p>request modes: direct metrics input or package-driven extraction</p>
+              </article>
+              <article class="stat">
+                <strong>1</strong>
+                <p>inspectable story: request, decision, manifest, audit, stored package</p>
+              </article>
+            </div>
+
+            <div class="chapter-links">
+              <a href="#quickstart">Run It</a>
+              <a href="#workflow">See The Flow</a>
+              <a href="#workspace">Inspect Artifacts</a>
+              <a href="#troubleshooting">Fix Common Problems</a>
+            </div>
+          </div>
+
+          <figure class="figure">
+            <h3>System overview</h3>
+            <svg viewBox="0 0 760 520" role="img" aria-label="Overview of scanner to PathFlow Guard to routed outcomes">
+              <defs>
+                <linearGradient id="heroA" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#17324c"></stop>
+                  <stop offset="100%" stop-color="#10253d"></stop>
+                </linearGradient>
+              </defs>
+              <rect x="20" y="20" width="720" height="480" rx="34" fill="#faf7f2"></rect>
+              <rect x="56" y="68" width="184" height="132" rx="24" fill="url(#heroA)"></rect>
+              <rect x="80" y="92" width="132" height="16" rx="8" fill="#e9f3ff" opacity="0.95"></rect>
+              <rect x="80" y="122" width="88" height="54" rx="12" fill="#d66034"></rect>
+              <rect x="176" y="122" width="36" height="54" rx="12" fill="#ffb179"></rect>
+              <text x="82" y="188" fill="#edf4ff" font-size="15" font-family="Segoe UI, sans-serif">scanner export or package folder</text>
+              <path d="M242 134h72" stroke="#d66034" stroke-width="8" stroke-linecap="round"></path>
+              <polygon points="314,134 296,123 296,145" fill="#d66034"></polygon>
+              <rect x="326" y="64" width="172" height="144" rx="24" fill="#fffdf8" stroke="#e5ddd2" stroke-width="2"></rect>
+              <rect x="352" y="150" width="120" height="32" rx="14" fill="#eef6f3" stroke="#d2e5de"></rect>
+              <text x="366" y="171" fill="#1f7560" font-size="15" font-family="Segoe UI, sans-serif" font-weight="700">extract metrics if needed</text>
+              <text x="360" y="196" fill="#5c6673" font-size="14" font-family="Segoe UI, sans-serif">focus, tissue, artifacts, bytes</text>
+              <path d="M498 134h72" stroke="#d66034" stroke-width="8" stroke-linecap="round"></path>
+              <polygon points="570,134 552,123 552,145" fill="#d66034"></polygon>
+              <rect x="582" y="52" width="118" height="168" rx="24" fill="#fff7f2" stroke="#efd4c6" stroke-width="2"></rect>
+              <text x="608" y="86" fill="#8c3619" font-size="20" font-family="Segoe UI, sans-serif" font-weight="700">policy</text>
+              <text x="604" y="114" fill="#6b5a50" font-size="14" font-family="Segoe UI, sans-serif">objective power</text>
+              <text x="604" y="138" fill="#6b5a50" font-size="14" font-family="Segoe UI, sans-serif">file size</text>
+              <text x="604" y="162" fill="#6b5a50" font-size="14" font-family="Segoe UI, sans-serif">focus thresholds</text>
+              <text x="604" y="186" fill="#6b5a50" font-size="14" font-family="Segoe UI, sans-serif">tissue thresholds</text>
+              <text x="604" y="210" fill="#6b5a50" font-size="14" font-family="Segoe UI, sans-serif">artifact thresholds</text>
+              <path d="M142 224v66" stroke="#17324c" stroke-width="8" stroke-linecap="round"></path>
+              <path d="M412 232v58" stroke="#17324c" stroke-width="8" stroke-linecap="round"></path>
+              <path d="M640 244v46" stroke="#17324c" stroke-width="8" stroke-linecap="round"></path>
+              <rect x="58" y="304" width="170" height="86" rx="24" fill="#eef6f3" stroke="#d0e6de" stroke-width="2"></rect>
+              <text x="104" y="345" fill="#1f7560" font-size="28" font-family="Segoe UI, sans-serif" font-weight="700">ACCEPT</text>
+              <rect x="326" y="304" width="172" height="86" rx="24" fill="#fff8eb" stroke="#efdcb2" stroke-width="2"></rect>
+              <text x="376" y="345" fill="#af7625" font-size="28" font-family="Segoe UI, sans-serif" font-weight="700">REVIEW</text>
+              <rect x="554" y="304" width="172" height="86" rx="24" fill="#fff0ed" stroke="#edcbc6" stroke-width="2"></rect>
+              <text x="610" y="345" fill="#a74235" font-size="28" font-family="Segoe UI, sans-serif" font-weight="700">REJECT</text>
+              <rect x="92" y="420" width="560" height="46" rx="18" fill="url(#heroA)"></rect>
+              <text x="118" y="449" fill="#edf4ff" font-size="16" font-family="Segoe UI, sans-serif">every job also writes request JSON, manifest JSON, audit JSON, and SQLite rows</text>
+            </svg>
+            <figcaption>
+              PathFlow Guard is deliberately linear. A request is resolved, metrics are extracted
+              if missing, policy is applied, and outputs are written in a form that operators can
+              inspect directly on disk or through the API.
+            </figcaption>
+          </figure>
+        </section>
+
+        <section class="panel" id="quickstart">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Quick Start</p>
+              <h2>Two practical ways to run the product.</h2>
+            </div>
+            <p class="small">
+              Use the source path while developing or validating changes. Use the packaged
+              executable when you want the operator-facing Windows delivery.
+            </p>
+          </div>
+
+          <div class="callout-grid">
+            <article class="callout">
+              <span class="kicker">Prerequisites</span>
+              <h3>Minimum runtime expectations</h3>
+              <ul>
+                <li>Python 3.12 or newer for the source-installed orchestrator</li>
+                <li>Windows 11 or another environment supported by your Python and OpenSlide toolchain</li>
+                <li>OpenSlide native runtime for real whole-slide extraction outside the packaged Windows flow</li>
+              </ul>
+            </article>
+            <article class="callout">
+              <span class="kicker">First validation</span>
+              <h3>Three commands worth learning first</h3>
+              <ul>
+                <li><code>pathflow-guard doctor</code> reports runtime capabilities</li>
+                <li><code>pathflow-guard demo</code> seeds sample jobs into a workspace</li>
+                <li><code>pathflow-guard serve</code> starts the local dashboard and API</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="table-card-grid">
+            <div class="code-block">
+              <code>cd python\orchestrator
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+pathflow-guard doctor
+pathflow-guard init --workspace .\runtime
+pathflow-guard demo --workspace .\runtime
+pathflow-guard report --workspace .\runtime
+pathflow-guard serve --workspace .\runtime --port 8765</code>
+            </div>
+            <article class="guide">
+              <h3>Run from source</h3>
+              <p>
+                This is the normal developer path. If your Python Scripts directory is not on
+                <code>PATH</code>, use the module form:
+                <code>python -m pathflow_guard.cli doctor</code>.
+              </p>
+            </article>
+          </div>
+
+          <div class="table-card-grid">
+            <div class="code-block">
+              <code>cd python\orchestrator
+.\build_windows.ps1
+.\dist\PathFlowGuard.exe doctor
+.\dist\PathFlowGuard.exe init --workspace .\runtime
+.\dist\PathFlowGuard.exe demo --workspace .\runtime
+.\dist\PathFlowGuard.exe serve --workspace .\runtime --port 8765</code>
+            </div>
+            <article class="guide">
+              <h3>Run the packaged EXE</h3>
+              <p>
+                The build script installs dependencies, runs PyInstaller with
+                <code>PathFlowGuard.spec</code>, and produces <code>dist\PathFlowGuard.exe</code>.
+                Add <code>-SmokeTest</code> when you want a packaged-workflow validation.
+              </p>
+            </article>
+          </div>
+
+          <div class="note">
+            Preferred operator sequence: run <code>doctor</code>, initialize a workspace, seed
+            demo data or ingest a real request, then open the dashboard at
+            <code>http://127.0.0.1:8765</code>.
+          </div>
+        </section>
+
+        <section class="panel" id="workflow">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Workflow</p>
+              <h2>The runtime is a stepwise evidence pipeline.</h2>
+            </div>
+            <p class="small">
+              The workflow is intentionally small and inspectable. Each step either adds evidence
+              to the request or records an output that can be revisited later.
+            </p>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <span class="kicker">1</span>
+              <h3>Read request</h3>
+              <p>Load a JSON payload into the strict request model and validate required string fields.</p>
+            </article>
+            <article class="step">
+              <span class="kicker">2</span>
+              <h3>Resolve context</h3>
+              <p>Resolve <code>package_path</code> relative to the request file and compute file bytes when absent.</p>
+            </article>
+            <article class="step">
+              <span class="kicker">3</span>
+              <h3>Extract metrics</h3>
+              <p>If focus, tissue, or artifact fields are missing, PathFlow Guard samples the package.</p>
+            </article>
+            <article class="step">
+              <span class="kicker">4</span>
+              <h3>Evaluate policy</h3>
+              <p>Threshold and compatibility checks generate reason codes and a deterministic routing decision.</p>
+            </article>
+            <article class="step">
+              <span class="kicker">5</span>
+              <h3>Persist artifacts</h3>
+              <p>Write the resolved request JSON, optional manifest, audit JSON, and SQLite rows.</p>
+            </article>
+            <article class="step">
+              <span class="kicker">6</span>
+              <h3>Route payload</h3>
+              <p>Copy the package into <code>accepted/</code>, <code>review/</code>, or <code>rejected/</code>.</p>
+            </article>
+            <article class="step">
+              <span class="kicker">7</span>
+              <h3>Expose results</h3>
+              <p>The same job can be viewed on disk, in SQLite, on the dashboard, or through the JSON API.</p>
+            </article>
+            <article class="step">
+              <span class="kicker">8</span>
+              <h3>Escalate uncertainty</h3>
+              <p>Borderline conditions are routed to manual review instead of being silently accepted.</p>
+            </article>
+          </div>
+
+          <div class="matrix-grid">
+            <figure class="figure">
+              <h3>Lifecycle of one request</h3>
+              <svg viewBox="0 0 820 420" role="img" aria-label="Lifecycle of one request from JSON through artifacts">
+                <rect x="20" y="20" width="780" height="380" rx="34" fill="#faf7f2"></rect>
+
+                <rect x="50" y="84" width="138" height="88" rx="20" fill="#17324c"></rect>
+                <text x="86" y="124" fill="#edf4ff" font-size="22" font-family="Segoe UI, sans-serif" font-weight="700">request</text>
+                <text x="79" y="148" fill="#edf4ff" font-size="14" font-family="Segoe UI, sans-serif">accept.json</text>
+
+                <rect x="246" y="84" width="154" height="88" rx="20" fill="#fffdf8" stroke="#dfd6ca"></rect>
+                <text x="279" y="120" fill="#162237" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">resolve context</text>
+                <text x="270" y="146" fill="#5f6b7a" font-size="14" font-family="Segoe UI, sans-serif">absolute path, bytes, metrics</text>
+
+                <rect x="456" y="84" width="144" height="88" rx="20" fill="#fff7f2" stroke="#efd2c3"></rect>
+                <text x="493" y="120" fill="#8c3619" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">evaluate</text>
+                <text x="486" y="146" fill="#6d594f" font-size="14" font-family="Segoe UI, sans-serif">reasons + decision</text>
+
+                <rect x="640" y="84" width="120" height="88" rx="20" fill="#eef6f3" stroke="#d0e6de"></rect>
+                <text x="664" y="120" fill="#1f7560" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">persist</text>
+                <text x="656" y="146" fill="#546962" font-size="14" font-family="Segoe UI, sans-serif">job record</text>
+
+                <path d="M188 128h58M400 128h56M600 128h40" stroke="#162237" stroke-width="7" stroke-linecap="round"></path>
+                <polygon points="246,128 230,118 230,138" fill="#162237"></polygon>
+                <polygon points="456,128 440,118 440,138" fill="#162237"></polygon>
+                <polygon points="640,128 624,118 624,138" fill="#162237"></polygon>
+
+                <rect x="68" y="244" width="178" height="110" rx="22" fill="#fffdf8" stroke="#dfd6ca"></rect>
+                <text x="100" y="280" fill="#162237" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">request record</text>
+                <text x="94" y="306" fill="#5f6b7a" font-size="14" font-family="Segoe UI, sans-serif">runtime\requests\job-....json</text>
+
+                <rect x="292" y="244" width="178" height="110" rx="22" fill="#fffdf8" stroke="#dfd6ca"></rect>
+                <text x="330" y="280" fill="#162237" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">manifest</text>
+                <text x="316" y="306" fill="#5f6b7a" font-size="14" font-family="Segoe UI, sans-serif">runtime\manifests\job-....json</text>
+
+                <rect x="516" y="244" width="240" height="110" rx="22" fill="#fffdf8" stroke="#dfd6ca"></rect>
+                <text x="566" y="280" fill="#162237" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">audit + route</text>
+                <text x="542" y="306" fill="#5f6b7a" font-size="14" font-family="Segoe UI, sans-serif">audit JSON, SQLite rows, copied package</text>
+
+                <path d="M700 172v48M700 220h-542" stroke="#d66034" stroke-width="6" stroke-linecap="round"></path>
+                <polygon points="158,220 174,210 174,230" fill="#d66034"></polygon>
+              </svg>
+              <figcaption>
+                The runtime is designed so one job can always be explained after the fact. The
+                resolved request, decision, copied payload, and audit trail remain linked by job ID.
+              </figcaption>
+            </figure>
+
+            <article class="guide">
+              <h3>Operator expectations</h3>
+              <ul>
+                <li>Use JSON requests for repeatable intake and evidence preservation.</li>
+                <li>Prefer <code>ingest</code> when you want an auditable job, not just a dry evaluation.</li>
+                <li>Use <code>report</code> for a quick workspace summary and recent job list.</li>
+                <li>Use <code>/jobs/&lt;job_id&gt;</code> when reviewing one routed case in the browser.</li>
+              </ul>
+              <div class="decision-row">
+                <span class="decision accept">accept -> upload lane</span>
+                <span class="decision review">review -> manual hold</span>
+                <span class="decision reject">reject -> rescan path</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="requests">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Request Model</p>
+              <h2>Requests are simple by design, but the runtime enriches them before evaluation.</h2>
+            </div>
+            <p class="small">
+              PathFlow Guard accepts direct metric input, package-driven extraction, or a mix of
+              both. Missing bytes and QC metrics can be resolved automatically when a package path
+              is present.
+            </p>
+          </div>
+
+          <div class="split-grid">
+            <div class="code-block">
+              <code>{
+  "case_id": "CASE-2026-101",
+  "slide_id": "SLIDE-101",
+  "site_id": "SITE-EDGE-ALPHA",
+  "objective_power": 40,
+  "file_bytes": 0,
+  "package_path": "../packages/accept-package",
+  "notes": "Expected accept lane sample."
+}</code>
+            </div>
+            <article class="guide">
+              <h3>What happens to this sample</h3>
+              <p>
+                The sample request does not provide focus, tissue, or artifact metrics, so the
+                pipeline resolves the package path, measures bytes from disk, extracts the missing
+                metrics, and only then applies the rule engine.
+              </p>
+            </article>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Required</th>
+                  <th>Meaning</th>
+                  <th>Runtime behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>case_id</strong></td>
+                  <td>string</td>
+                  <td>yes</td>
+                  <td>Case identifier carried into job records and UI views</td>
+                  <td>Empty values fail validation</td>
+                </tr>
+                <tr>
+                  <td><strong>slide_id</strong></td>
+                  <td>string</td>
+                  <td>yes</td>
+                  <td>Slide identifier used in audit and review screens</td>
+                  <td>Empty values fail validation</td>
+                </tr>
+                <tr>
+                  <td><strong>site_id</strong></td>
+                  <td>string</td>
+                  <td>yes</td>
+                  <td>Edge location or originating site</td>
+                  <td>Empty values fail validation</td>
+                </tr>
+                <tr>
+                  <td><strong>objective_power</strong></td>
+                  <td>integer</td>
+                  <td>no</td>
+                  <td>Scanner objective power</td>
+                  <td>Defaults to 40; unsupported values cause review</td>
+                </tr>
+                <tr>
+                  <td><strong>file_bytes</strong></td>
+                  <td>integer</td>
+                  <td>no</td>
+                  <td>Declared package size</td>
+                  <td>If zero and a package exists, the pipeline measures bytes from disk</td>
+                </tr>
+                <tr>
+                  <td><strong>focus_score</strong></td>
+                  <td>float</td>
+                  <td>conditional</td>
+                  <td>Sharpness-derived score</td>
+                  <td>Must be present or extractable from image data</td>
+                </tr>
+                <tr>
+                  <td><strong>tissue_coverage</strong></td>
+                  <td>float</td>
+                  <td>conditional</td>
+                  <td>Fraction of tile pixels treated as tissue-bearing</td>
+                  <td>Must be present or extractable from image data</td>
+                </tr>
+                <tr>
+                  <td><strong>artifact_ratio</strong></td>
+                  <td>float</td>
+                  <td>conditional</td>
+                  <td>Fraction of pixels flagged as likely artifact</td>
+                  <td>Must be present or extractable from image data</td>
+                </tr>
+                <tr>
+                  <td><strong>package_path</strong></td>
+                  <td>string</td>
+                  <td>no</td>
+                  <td>File or directory containing tiles or a whole-slide image</td>
+                  <td>Relative paths are resolved from the request JSON location</td>
+                </tr>
+                <tr>
+                  <td><strong>notes</strong></td>
+                  <td>string</td>
+                  <td>no</td>
+                  <td>Operator note persisted into the stored request and SQLite row</td>
+                  <td>Defaults to empty string</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout-grid">
+            <article class="callout">
+              <span class="kicker">Resolution rules</span>
+              <h3>When the runtime changes the request</h3>
+              <ul>
+                <li>Relative <code>package_path</code> values become absolute paths before use.</li>
+                <li><code>file_bytes</code> is computed from disk if the declared value is not usable.</li>
+                <li>Missing QC metrics trigger automatic extraction from the slide package.</li>
+                <li>The resolved request is what gets written to <code>requests/</code>.</li>
+              </ul>
+            </article>
+            <article class="callout">
+              <span class="kicker">Compatibility</span>
+              <h3>Legacy CLI behavior</h3>
+              <p>
+                Passing a single existing file path to the CLI without a subcommand is treated as
+                a legacy evaluate invocation. Preferred usage is still explicit:
+                <code>pathflow-guard evaluate request.json</code>.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="decisions">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Decision Engine</p>
+              <h2>Deterministic thresholds drive routing, and reason codes explain why.</h2>
+            </div>
+            <p class="small">
+              The rule engine is conservative on purpose. It prefers auditable manual review over
+              silent acceptance when important signals fall outside the expected range.
+            </p>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Signal</th>
+                  <th>Review trigger</th>
+                  <th>Reject trigger</th>
+                  <th>Current default behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>focus_score</strong></td>
+                  <td>&lt; 55.0</td>
+                  <td>&lt; 35.0</td>
+                  <td>Borderline blur goes to review; severe blur rejects</td>
+                </tr>
+                <tr>
+                  <td><strong>tissue_coverage</strong></td>
+                  <td>&lt; 0.10</td>
+                  <td>&lt; 0.03</td>
+                  <td>Low tissue presence is escalated before upload</td>
+                </tr>
+                <tr>
+                  <td><strong>artifact_ratio</strong></td>
+                  <td>&gt; 0.12</td>
+                  <td>&gt; 0.25</td>
+                  <td>Artifact-heavy content is held or rejected</td>
+                </tr>
+                <tr>
+                  <td><strong>objective_power</strong></td>
+                  <td>not in (20, 40)</td>
+                  <td>n/a</td>
+                  <td>Unsupported objective powers route to review</td>
+                </tr>
+                <tr>
+                  <td><strong>file_bytes</strong></td>
+                  <td>&gt; 5 GiB</td>
+                  <td>&lt;= 0</td>
+                  <td>Oversized packages route to review; invalid size rejects</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="matrix-grid">
+            <figure class="figure">
+              <h3>Decision precedence</h3>
+              <svg viewBox="0 0 780 420" role="img" aria-label="Decision precedence diagram">
+                <rect x="20" y="20" width="740" height="380" rx="34" fill="#faf7f2"></rect>
+                <rect x="68" y="56" width="644" height="70" rx="20" fill="#17324c"></rect>
+                <text x="108" y="98" fill="#edf4ff" font-size="24" font-family="Segoe UI, sans-serif" font-weight="700">collect reason codes from all checks</text>
+                <rect x="90" y="168" width="600" height="48" rx="18" fill="#fff7f2" stroke="#efd2c3"></rect>
+                <text x="118" y="199" fill="#8c3619" font-size="18" font-family="Segoe UI, sans-serif">if any reason ends with _reject_threshold -&gt; REJECT</text>
+                <rect x="90" y="230" width="600" height="48" rx="18" fill="#fff8eb" stroke="#efdcb2"></rect>
+                <text x="118" y="261" fill="#8b641a" font-size="18" font-family="Segoe UI, sans-serif">else if unsupported objective power or file too large -&gt; REVIEW</text>
+                <rect x="90" y="292" width="600" height="48" rx="18" fill="#fff8eb" stroke="#efdcb2"></rect>
+                <text x="118" y="323" fill="#8b641a" font-size="18" font-family="Segoe UI, sans-serif">else if any reason ends with _review_threshold -&gt; REVIEW</text>
+                <rect x="90" y="354" width="600" height="28" rx="14" fill="#eef6f3" stroke="#d0e6de"></rect>
+                <text x="256" y="373" fill="#1f7560" font-size="16" font-family="Segoe UI, sans-serif">else invalid size rejects; otherwise ACCEPT</text>
+              </svg>
+              <figcaption>
+                Decision selection is deliberately simple: collect reason codes, then apply a
+                stable precedence rule. This makes the outcome easier to test and easier to explain.
+              </figcaption>
+            </figure>
+
+            <article class="guide">
+              <h3>Common reason codes</h3>
+              <ul>
+                <li><code>unsupported_objective_power</code></li>
+                <li><code>invalid_file_size</code></li>
+                <li><code>file_too_large</code></li>
+                <li><code>focus_below_review_threshold</code></li>
+                <li><code>focus_below_reject_threshold</code></li>
+                <li><code>tissue_below_review_threshold</code></li>
+                <li><code>tissue_below_reject_threshold</code></li>
+                <li><code>artifact_above_review_threshold</code></li>
+                <li><code>artifact_above_reject_threshold</code></li>
+              </ul>
+              <div class="warning">
+                The current thresholds are heuristic first-version rules, not clinically validated
+                production algorithms. The design intent is inspectable workflow control, not autonomous diagnosis.
+              </div>
+            </article>
+          </div>
+        </section>
+        <section class="panel" id="imaging">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Imaging</p>
+              <h2>PathFlow Guard handles raster tile folders and OpenSlide-backed whole-slide files.</h2>
+            </div>
+            <p class="small">
+              Extraction is format-aware. The runtime first looks for a recognizable whole-slide
+              image. If it finds one, it samples representative regions. Otherwise, it aggregates
+              supported raster tiles from the package.
+            </p>
+          </div>
+
+          <div class="card-grid">
+            <article class="card">
+              <span class="kicker">Raster path</span>
+              <h3>Tile folders or single image files</h3>
+              <p>
+                Supported raster extensions are <code>.bmp</code>, <code>.gif</code>,
+                <code>.jpeg</code>, <code>.jpg</code>, <code>.pgm</code>, <code>.png</code>,
+                <code>.ppm</code>, <code>.tif</code>, and <code>.tiff</code>. Large images are
+                reduced to a 256x256 working size before measurement.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">WSI path</span>
+              <h3>Whole-slide file discovery</h3>
+              <p>
+                Known WSI formats include <code>.svs</code>, <code>.ndpi</code>,
+                <code>.mrxs</code>, <code>.scn</code>, <code>.bif</code>,
+                <code>.svslide</code>, <code>.vms</code>, and <code>.vmu</code>. The ambiguous
+                <code>.tif</code> and <code>.tiff</code> extensions are treated as whole-slide
+                candidates only when OpenSlide recognizes them.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">Metrics</span>
+              <h3>What is actually measured</h3>
+              <p>
+                Focus comes from an average local Laplacian response, tissue coverage from a simple
+                grayscale threshold, and artifact ratio from isolated brightness spikes and strong
+                saturated color markers.
+              </p>
+            </article>
+          </div>
+
+          <div class="split-grid">
+            <figure class="figure">
+              <h3>Whole-slide extraction flow</h3>
+              <svg viewBox="0 0 760 420" role="img" aria-label="OpenSlide extraction flow diagram">
+                <rect x="20" y="20" width="720" height="380" rx="34" fill="#faf7f2"></rect>
+                <rect x="58" y="74" width="160" height="78" rx="22" fill="#17324c"></rect>
+                <text x="98" y="119" fill="#edf4ff" font-size="22" font-family="Segoe UI, sans-serif" font-weight="700">find slide</text>
+                <rect x="286" y="74" width="186" height="78" rx="22" fill="#fffdf8" stroke="#dfd6ca"></rect>
+                <text x="328" y="108" fill="#162237" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">detect format</text>
+                <text x="315" y="132" fill="#5f6b7a" font-size="14" font-family="Segoe UI, sans-serif">OpenSlide must recognize vendor</text>
+                <rect x="540" y="74" width="160" height="78" rx="22" fill="#fff7f2" stroke="#efd2c3"></rect>
+                <text x="565" y="108" fill="#8c3619" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">read bounds</text>
+                <text x="564" y="132" fill="#6d594f" font-size="14" font-family="Segoe UI, sans-serif">prefer metadata bounds</text>
+                <path d="M218 113h68M472 113h68" stroke="#162237" stroke-width="7" stroke-linecap="round"></path>
+                <polygon points="286,113 270,103 270,123" fill="#162237"></polygon>
+                <polygon points="540,113 524,103 524,123" fill="#162237"></polygon>
+                <rect x="82" y="240" width="186" height="92" rx="24" fill="#eef6f3" stroke="#d0e6de"></rect>
+                <text x="112" y="280" fill="#1f7560" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">build tile grid</text>
+                <text x="104" y="304" fill="#526a63" font-size="14" font-family="Segoe UI, sans-serif">up to 24 representative regions</text>
+                <rect x="300" y="240" width="186" height="92" rx="24" fill="#fffdf8" stroke="#dfd6ca"></rect>
+                <text x="334" y="280" fill="#162237" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">read_region()</text>
+                <text x="320" y="304" fill="#5f6b7a" font-size="14" font-family="Segoe UI, sans-serif">convert RGBA tiles to RGB</text>
+                <rect x="518" y="240" width="160" height="92" rx="24" fill="#fff8eb" stroke="#efdcb2"></rect>
+                <text x="548" y="280" fill="#8b641a" font-size="18" font-family="Segoe UI, sans-serif" font-weight="700">aggregate</text>
+                <text x="539" y="304" fill="#78654f" font-size="14" font-family="Segoe UI, sans-serif">weighted by pixel count</text>
+                <path d="M268 286h32M486 286h32" stroke="#d66034" stroke-width="7" stroke-linecap="round"></path>
+                <polygon points="300,286 286,277 286,295" fill="#d66034"></polygon>
+                <polygon points="518,286 504,277 504,295" fill="#d66034"></polygon>
+              </svg>
+              <figcaption>
+                Whole-slide extraction does not load the full slide into memory. It samples a
+                deterministic grid of representative regions and computes aggregate metrics over
+                the resulting tiles.
+              </figcaption>
+            </figure>
+
+            <div class="mini-grid">
+              <article class="mini-card">
+                <strong>24</strong>
+                <p>default maximum tile samples per extraction call</p>
+              </article>
+              <article class="mini-card">
+                <strong>256</strong>
+                <p>slide tile size used for representative region requests</p>
+              </article>
+              <article class="mini-card">
+                <strong>225</strong>
+                <p>grayscale cutoff used by the current tissue heuristic</p>
+              </article>
+              <article class="mini-card">
+                <strong>75</strong>
+                <p>local grayscale spike threshold used in artifact detection</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="warning">
+            On Windows, OpenSlide runtime discovery checks packaged runtime locations,
+            <code>openslide_bin</code>, and Conda-style <code>Library\bin</code> directories.
+            If OpenSlide cannot be loaded, whole-slide extraction fails and <code>doctor</code>
+            reports that limitation.
+          </div>
+        </section>
+
+        <section class="panel" id="interfaces">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Interfaces</p>
+              <h2>One engine, three operator surfaces: CLI, dashboard, and JSON API.</h2>
+            </div>
+            <p class="small">
+              The CLI is the authoritative control surface. The dashboard and API are thin layers
+              over the same repository and pipeline objects, which keeps behavior aligned.
+            </p>
+          </div>
+
+          <div class="split-grid">
+            <figure class="figure">
+              <h3>Interface stack</h3>
+              <svg viewBox="0 0 760 380" role="img" aria-label="CLI, dashboard, and API over common pipeline">
+                <rect x="20" y="20" width="720" height="340" rx="34" fill="#faf7f2"></rect>
+                <rect x="62" y="70" width="180" height="88" rx="22" fill="#17324c"></rect>
+                <text x="124" y="118" fill="#edf4ff" font-size="24" font-family="Segoe UI, sans-serif" font-weight="700">CLI</text>
+                <rect x="290" y="70" width="180" height="88" rx="22" fill="#d66034"></rect>
+                <text x="332" y="118" fill="#fff7f2" font-size="24" font-family="Segoe UI, sans-serif" font-weight="700">Dashboard</text>
+                <rect x="518" y="70" width="180" height="88" rx="22" fill="#1f7560"></rect>
+                <text x="582" y="118" fill="#edf8f4" font-size="24" font-family="Segoe UI, sans-serif" font-weight="700">API</text>
+                <rect x="190" y="224" width="380" height="88" rx="24" fill="#fffdf8" stroke="#dfd6ca" stroke-width="2"></rect>
+                <text x="286" y="260" fill="#162237" font-size="22" font-family="Segoe UI, sans-serif" font-weight="700">pipeline + repository</text>
+                <text x="240" y="285" fill="#5f6b7a" font-size="15" font-family="Segoe UI, sans-serif">same request model, same decision logic, same stored artifacts</text>
+                <path d="M152 158v48M380 158v48M608 158v48" stroke="#162237" stroke-width="7" stroke-linecap="round"></path>
+                <polygon points="152,206 142,188 162,188" fill="#162237"></polygon>
+                <polygon points="380,206 370,188 390,188" fill="#162237"></polygon>
+                <polygon points="608,206 598,188 618,188" fill="#162237"></polygon>
+              </svg>
+              <figcaption>
+                The dashboard is not a separate business-logic layer. It uses the same stored job
+                records and the same ingestion pipeline that the CLI uses.
+              </figcaption>
+            </figure>
+
+            <article class="guide">
+              <h3>CLI command reference</h3>
+              <ul>
+                <li><code>init --workspace PATH</code>: create workspace directories and the SQLite database</li>
+                <li><code>evaluate REQUEST.json</code>: resolve context and return a decision without persisting a job</li>
+                <li><code>extract PACKAGE_PATH</code>: print extracted metrics as JSON</li>
+                <li><code>doctor</code>: show runtime and OpenSlide capabilities</li>
+                <li><code>ingest REQUEST.json --workspace PATH</code>: evaluate, persist, audit, manifest, and route</li>
+                <li><code>report --workspace PATH --limit N</code>: print counts and recent jobs</li>
+                <li><code>serve --workspace PATH --host HOST --port PORT</code>: start the local web server</li>
+                <li><code>demo --workspace PATH</code>: seed sample requests from <code>samples/requests</code></li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Surface</th>
+                  <th>Path or command</th>
+                  <th>Purpose</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Dashboard</strong></td>
+                  <td><code>/</code></td>
+                  <td>Summary cards, recent jobs table, manual ingest form</td>
+                  <td>Good for local operator review and smoke checks</td>
+                </tr>
+                <tr>
+                  <td><strong>Job detail</strong></td>
+                  <td><code>/jobs/&lt;job_id&gt;</code></td>
+                  <td>Human-readable view of one stored job</td>
+                  <td>Shows request fields, reasons, and file paths</td>
+                </tr>
+                <tr>
+                  <td><strong>API list</strong></td>
+                  <td><code>/api/jobs</code></td>
+                  <td>JSON export of recent jobs</td>
+                  <td>Backed directly by repository export</td>
+                </tr>
+                <tr>
+                  <td><strong>API detail</strong></td>
+                  <td><code>/api/jobs/&lt;job_id&gt;</code></td>
+                  <td>JSON for one job record</td>
+                  <td>Useful for scripting and integration tests</td>
+                </tr>
+                <tr>
+                  <td><strong>Health probe</strong></td>
+                  <td><code>/healthz</code></td>
+                  <td>Simple status endpoint returning <code>{"status":"ok"}</code></td>
+                  <td>Used in packaged smoke testing</td>
+                </tr>
+                <tr>
+                  <td><strong>Manual ingest</strong></td>
+                  <td><code>POST /ingest</code></td>
+                  <td>Form-based intake from the dashboard</td>
+                  <td>Redirects to the created job detail page on success</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel" id="workspace">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Workspace</p>
+              <h2>Every ingest produces inspectable disk artifacts plus database state.</h2>
+            </div>
+            <p class="small">
+              The default workspace root is <code>runtime</code> under the current working
+              directory. The layout is intentionally plain so operators can inspect it directly.
+            </p>
+          </div>
+
+          <div class="table-card-grid">
+            <div class="code-block">
+              <code>runtime\
+  accepted\
+  review\
+  rejected\
+  requests\
+  manifests\
+  audit\
+  pathflow_guard.db</code>
+            </div>
+            <article class="guide">
+              <h3>What lives where</h3>
+              <p>
+                The workspace contains the routed package copies, the resolved request records, the
+                generated content manifests, the per-job audit JSON, and the SQLite database used
+                for reporting and the web UI.
+              </p>
+            </article>
+          </div>
+
+          <div class="card-grid">
+            <article class="card">
+              <span class="kicker">requests/</span>
+              <h3>Resolved request record</h3>
+              <p>
+                Stores the final request used by the rule engine, after path resolution, byte
+                measurement, and optional metric extraction.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">manifests/</span>
+              <h3>Deterministic package manifest</h3>
+              <p>
+                Each manifest records a generated timestamp, source path, total bytes, and a sorted
+                list of file entries containing relative path, byte count, and BLAKE2b hash.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">audit/</span>
+              <h3>Event timeline</h3>
+              <p>
+                The audit JSON stores a list of events per job. Current event types are
+                <code>metrics_extracted</code> and <code>job_ingested</code>.
+              </p>
+            </article>
+          </div>
+
+          <div class="matrix-grid">
+            <figure class="figure">
+              <h3>How one job maps onto storage</h3>
+              <svg viewBox="0 0 820 430" role="img" aria-label="Job to workspace artifact mapping diagram">
+                <rect x="20" y="20" width="780" height="390" rx="34" fill="#faf7f2"></rect>
+                <rect x="68" y="72" width="174" height="280" rx="24" fill="#17324c"></rect>
+                <text x="114" y="108" fill="#edf4ff" font-size="24" font-family="Segoe UI, sans-serif" font-weight="700">job_id</text>
+                <text x="90" y="142" fill="#edf4ff" font-size="16" font-family="Segoe UI, sans-serif">job-20260403...</text>
+                <text x="92" y="188" fill="#a7bbd1" font-size="14" font-family="Segoe UI, sans-serif">case_id</text>
+                <text x="92" y="214" fill="#a7bbd1" font-size="14" font-family="Segoe UI, sans-serif">slide_id</text>
+                <text x="92" y="240" fill="#a7bbd1" font-size="14" font-family="Segoe UI, sans-serif">decision</text>
+                <text x="92" y="266" fill="#a7bbd1" font-size="14" font-family="Segoe UI, sans-serif">reasons_json</text>
+                <text x="92" y="292" fill="#a7bbd1" font-size="14" font-family="Segoe UI, sans-serif">manifest_path</text>
+                <text x="92" y="318" fill="#a7bbd1" font-size="14" font-family="Segoe UI, sans-serif">stored_package_path</text>
+                <rect x="300" y="58" width="190" height="96" rx="22" fill="#fffdf8" stroke="#dfd6ca"></rect>
+                <text x="346" y="95" fill="#162237" font-size="19" font-family="Segoe UI, sans-serif" font-weight="700">requests/</text>
+                <text x="326" y="122" fill="#5f6b7a" font-size="14" font-family="Segoe UI, sans-serif">resolved request JSON</text>
+                <rect x="300" y="172" width="190" height="96" rx="22" fill="#fffdf8" stroke="#dfd6ca"></rect>
+                <text x="339" y="209" fill="#162237" font-size="19" font-family="Segoe UI, sans-serif" font-weight="700">manifests/</text>
+                <text x="319" y="236" fill="#5f6b7a" font-size="14" font-family="Segoe UI, sans-serif">file entries + BLAKE2b</text>
+                <rect x="300" y="286" width="190" height="96" rx="22" fill="#fffdf8" stroke="#dfd6ca"></rect>
+                <text x="366" y="323" fill="#162237" font-size="19" font-family="Segoe UI, sans-serif" font-weight="700">audit/</text>
+                <text x="330" y="350" fill="#5f6b7a" font-size="14" font-family="Segoe UI, sans-serif">metrics_extracted, job_ingested</text>
+                <rect x="562" y="108" width="180" height="224" rx="24" fill="#eef6f3" stroke="#d0e6de"></rect>
+                <text x="618" y="146" fill="#1f7560" font-size="22" font-family="Segoe UI, sans-serif" font-weight="700">lanes</text>
+                <text x="598" y="182" fill="#526a63" font-size="15" font-family="Segoe UI, sans-serif">accepted/job-...</text>
+                <text x="598" y="212" fill="#78654f" font-size="15" font-family="Segoe UI, sans-serif">review/job-...</text>
+                <text x="598" y="242" fill="#7b5a55" font-size="15" font-family="Segoe UI, sans-serif">rejected/job-...</text>
+                <text x="598" y="284" fill="#526a63" font-size="14" font-family="Segoe UI, sans-serif">copied payload lives here</text>
+                <path d="M242 112h58M242 220h58M242 332h58M490 220h72" stroke="#162237" stroke-width="7" stroke-linecap="round"></path>
+                <polygon points="300,112 286,103 286,121" fill="#162237"></polygon>
+                <polygon points="300,220 286,211 286,229" fill="#162237"></polygon>
+                <polygon points="300,332 286,323 286,341" fill="#162237"></polygon>
+                <polygon points="562,220 548,211 548,229" fill="#162237"></polygon>
+              </svg>
+              <figcaption>
+                The SQLite <code>jobs</code> table stores paths back to the request record,
+                manifest, and stored package. This creates a simple but useful traceability chain.
+              </figcaption>
+            </figure>
+
+            <div>
+              <article class="guide">
+                <h3>Database schema highlights</h3>
+                <ul>
+                  <li><code>jobs</code> stores request fields, decision, reasons JSON, and key output paths.</li>
+                  <li><code>audit_events</code> stores event type plus a deterministic JSON payload.</li>
+                  <li><code>summarize()</code> groups decision counts for dashboard and report views.</li>
+                  <li><code>export_jobs()</code> returns serializable job records for the JSON API.</li>
+                </ul>
+              </article>
+              <div class="note" style="margin-top: 16px;">
+                Package copy behavior depends on source type. Directories are copied with
+                <code>copytree()</code>; individual files are copied into a job-specific directory.
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="panel" id="build">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Build And Deployment</p>
+              <h2>Local Windows delivery is implemented now; cloud continuation is scaffolded.</h2>
+            </div>
+            <p class="small">
+              The repo is organized around a real executable application, with companion native
+              modules and a forward path to Azure-hosted continuation for accepted jobs.
+            </p>
+          </div>
+
+          <div class="card-grid">
+            <article class="card">
+              <span class="kicker">Python orchestrator</span>
+              <h3>Current shipping runtime</h3>
+              <p>
+                Owns request loading, metric extraction dispatch, policy evaluation, manifest
+                creation, audit persistence, dashboard rendering, and API endpoints.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">C++ QC core</span>
+              <h3>Native metric path</h3>
+              <p>
+                Present as a reference implementation and future performance target for metric
+                computation and benchmarking on edge hardware.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">Rust attestor</span>
+              <h3>Integrity companion</h3>
+              <p>
+                Builds deterministic file manifests using BLAKE3 and provides a narrow place to
+                harden integrity-sensitive behavior outside the Python runtime.
+              </p>
+            </article>
+          </div>
+
+          <div class="split-grid">
+            <figure class="figure">
+              <h3>Deployment split</h3>
+              <svg viewBox="0 0 760 430" role="img" aria-label="Edge and cloud deployment split">
+                <rect x="20" y="20" width="720" height="390" rx="34" fill="#faf7f2"></rect>
+                <rect x="54" y="58" width="278" height="314" rx="28" fill="#17324c"></rect>
+                <text x="162" y="98" fill="#edf4ff" font-size="28" font-family="Segoe UI, sans-serif" font-weight="700">Edge</text>
+                <text x="86" y="140" fill="#edf4ff" font-size="16" font-family="Segoe UI, sans-serif">scanner-adjacent Windows node</text>
+                <text x="86" y="174" fill="#c0d0e2" font-size="15" font-family="Segoe UI, sans-serif">- local workspace</text>
+                <text x="86" y="202" fill="#c0d0e2" font-size="15" font-family="Segoe UI, sans-serif">- OpenSlide extraction</text>
+                <text x="86" y="230" fill="#c0d0e2" font-size="15" font-family="Segoe UI, sans-serif">- deterministic policy</text>
+                <text x="86" y="258" fill="#c0d0e2" font-size="15" font-family="Segoe UI, sans-serif">- operator review UI</text>
+                <text x="86" y="286" fill="#c0d0e2" font-size="15" font-family="Segoe UI, sans-serif">- optional Rust attestor</text>
+
+                <rect x="430" y="58" width="276" height="314" rx="28" fill="#fffdf8" stroke="#dfd6ca" stroke-width="2"></rect>
+                <text x="534" y="98" fill="#162237" font-size="28" font-family="Segoe UI, sans-serif" font-weight="700">Cloud</text>
+                <text x="466" y="140" fill="#5f6b7a" font-size="16" font-family="Segoe UI, sans-serif">Azure continuation path</text>
+                <text x="466" y="174" fill="#5f6b7a" font-size="15" font-family="Segoe UI, sans-serif">- Storage for accepted packages</text>
+                <text x="466" y="202" fill="#5f6b7a" font-size="15" font-family="Segoe UI, sans-serif">- Service Bus job distribution</text>
+                <text x="466" y="230" fill="#5f6b7a" font-size="15" font-family="Segoe UI, sans-serif">- Container Apps workers</text>
+                <text x="466" y="258" fill="#5f6b7a" font-size="15" font-family="Segoe UI, sans-serif">- Key Vault-backed secrets</text>
+                <text x="466" y="286" fill="#5f6b7a" font-size="15" font-family="Segoe UI, sans-serif">- audit-friendly deployment posture</text>
+
+                <path d="M332 214h82" stroke="#d66034" stroke-width="8" stroke-linecap="round"></path>
+                <polygon points="414,214 396,203 396,225" fill="#d66034"></polygon>
+                <text x="342" y="194" fill="#d66034" font-size="14" font-family="Segoe UI, sans-serif" font-weight="700">accepted jobs continue</text>
+              </svg>
+              <figcaption>
+                The design intent is to keep the decisive quality gate close to the instrument
+                network while still allowing accepted cases to continue into cloud storage,
+                indexing, and later AI or review workflows.
+              </figcaption>
+            </figure>
+
+            <div>
+              <article class="guide">
+                <h3>Windows build script details</h3>
+                <ul>
+                  <li><code>build_windows.ps1</code> accepts an optional <code>-Python</code> argument.</li>
+                  <li>Without that argument it prefers <code>py -3.12</code>, then falls back to <code>python</code>.</li>
+                  <li>It upgrades <code>pip</code>, installs <code>.[dev]</code>, and runs PyInstaller.</li>
+                  <li><code>smoke_windows_release.ps1</code> validates doctor, init, demo, report, serve, and extract on the packaged EXE.</li>
+                  <li><code>scripts\build_release.ps1</code> assembles a full versioned release bundle with checksums and release notes.</li>
+                </ul>
+              </article>
+              <article class="guide" style="margin-top: 16px;">
+                <h3>Release posture</h3>
+                <p>
+                  The repository is already set up for multi-language CI and a Windows release
+                  artifact flow. Tagged releases are intended to publish a versioned EXE, a
+                  versioned ZIP bundle, changelog-backed release notes, and checksums, with
+                  optional signing when secrets are configured.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="quality">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Verification And Quality</p>
+              <h2>Engineered like a disciplined medical-software project, while staying honest about scope.</h2>
+            </div>
+            <p class="small">
+              PathFlow Guard is not a regulatory submission. It is a working implementation scaffold
+              with real code, tests, design docs, and quality-system framing aligned to the domain.
+            </p>
+          </div>
+
+          <div class="callout-grid">
+            <article class="callout">
+              <span class="kicker">Automated verification</span>
+              <ul>
+                <li>Python unit tests for CLI, imaging, manifest, pipeline, service, and web server behavior</li>
+                <li>Ruff linting for the Python codebase</li>
+                <li>C++ configure, build, and CTest execution for the QC core</li>
+                <li>Rust format check, Clippy, and unit tests for the attestor</li>
+                <li>Packaged Windows smoke testing against the EXE</li>
+              </ul>
+            </article>
+            <article class="callout">
+              <span class="kicker">Quality-system framing</span>
+              <ul>
+                <li>IEC 62304-style lifecycle decomposition</li>
+                <li>ISO 13485-style design-control framing</li>
+                <li>ISO 14971-style risk framing</li>
+                <li>Traceability mapping from requirements to implementation and verification</li>
+                <li>Architecture and security posture documented with the code</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Concern</th>
+                  <th>Current answer in this repo</th>
+                  <th>Residual gap</th>
+                  <th>Reference</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Lifecycle control</strong></td>
+                  <td>Implementation, verification, and docs are kept together</td>
+                  <td>Formal release records and role assignments can be expanded</td>
+                  <td><a href="../quality/software-lifecycle.md">software-lifecycle.md</a></td>
+                </tr>
+                <tr>
+                  <td><strong>Design controls</strong></td>
+                  <td>Inputs, outputs, reviews, and changes are explicitly framed</td>
+                  <td>Additional review templates could be added</td>
+                  <td><a href="../quality/design-controls.md">design-controls.md</a></td>
+                </tr>
+                <tr>
+                  <td><strong>Risk management</strong></td>
+                  <td>False accepts, false rejects, tampering, and PHI risks are identified</td>
+                  <td>Needs broader validation against real-world cohorts</td>
+                  <td><a href="../quality/risk-register.md">risk-register.md</a></td>
+                </tr>
+                <tr>
+                  <td><strong>Traceability</strong></td>
+                  <td>Requirements are mapped to code and verification</td>
+                  <td>Should evolve as the rule engine grows</td>
+                  <td><a href="../quality/traceability-matrix.md">traceability-matrix.md</a></td>
+                </tr>
+                <tr>
+                  <td><strong>Security posture</strong></td>
+                  <td>PHI minimization intent, manifests, least privilege, CI review gates</td>
+                  <td>Would benefit from deeper dependency and deployment hardening</td>
+                  <td><a href="../architecture.md">architecture.md</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <figure class="asset-figure">
+            <img src="../assets/readme-workflow.svg" alt="PathFlow Guard workflow illustration">
+            <figcaption>
+              The repository-level workflow diagram complements this manual. The codebase and the
+              quality docs are both centered on the same pipeline: ingest, extract, evaluate,
+              persist, route, and review.
+            </figcaption>
+          </figure>
+        </section>
+
+        <section class="panel" id="troubleshooting">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Troubleshooting</p>
+              <h2>The problems you are most likely to hit first.</h2>
+            </div>
+            <p class="small">
+              Most startup failures come from environment setup, missing OpenSlide runtime support,
+              or incorrect request paths rather than logic defects in the pipeline itself.
+            </p>
+          </div>
+
+          <div class="card-grid">
+            <article class="card">
+              <span class="kicker">Symptom</span>
+              <h3><code>pathflow-guard</code> is not recognized</h3>
+              <p>
+                Add your Python Scripts directory to <code>PATH</code>, or run the CLI with
+                <code>python -m pathflow_guard.cli</code>. The installed console script lives in
+                the interpreter's <code>Scripts</code> directory.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">Symptom</span>
+              <h3><code>doctor</code> reports OpenSlide unavailable</h3>
+              <p>
+                Install <code>openslide-python</code> and the native runtime. On Windows the
+                packaged app bundles this path more predictably than a loose source environment.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">Symptom</span>
+              <h3>Package path does not resolve</h3>
+              <p>
+                Relative <code>package_path</code> values are resolved from the request JSON
+                location, not from the process working directory. Check the path from the request
+                file's directory, not from wherever you launched the CLI.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">Symptom</span>
+              <h3>Metrics are required unless extractable</h3>
+              <p>
+                If you omit <code>focus_score</code>, <code>tissue_coverage</code>, and
+                <code>artifact_ratio</code>, you must provide a valid package path containing a
+                supported raster image or recognized slide file.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">Symptom</span>
+              <h3>Unexpected review result</h3>
+              <p>
+                Check the reason codes first. Unsupported objective power or oversized file size
+                cause review even when the image metrics themselves look acceptable.
+              </p>
+            </article>
+            <article class="card">
+              <span class="kicker">Symptom</span>
+              <h3>Need to prove what happened for one job</h3>
+              <p>
+                Pull the job detail page or the JSON API record, then inspect the linked files in
+                <code>requests/</code>, <code>manifests/</code>, and <code>audit/</code>.
+              </p>
+            </article>
+          </div>
+
+          <div class="code-block">
+            <code>pathflow-guard doctor
+pathflow-guard extract .\samples\packages\accept-package
+pathflow-guard evaluate .\samples\requests\accept.json
+pathflow-guard ingest .\samples\requests\accept.json --workspace .\runtime
+pathflow-guard report --workspace .\runtime</code>
+          </div>
+        </section>
+
+        <section class="panel" id="reference">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Reference</p>
+              <h2>Useful project documents and operating reminders.</h2>
+            </div>
+            <p class="small">
+              This HTML manual is meant to stand on its own, but these repo documents remain the
+              primary source for adjacent process and architecture detail.
+            </p>
+          </div>
+
+          <div class="split-grid">
+            <article class="guide">
+              <h3>Core references</h3>
+              <ul>
+                <li><a href="../../README.md">README.md</a></li>
+                <li><a href="../architecture.md">docs/architecture.md</a></li>
+                <li><a href="../research.md">docs/research.md</a></li>
+                <li><a href="../../SECURITY.md">SECURITY.md</a></li>
+                <li><a href="../../CONTRIBUTING.md">CONTRIBUTING.md</a></li>
+                <li><a href="../../CHANGELOG.md">CHANGELOG.md</a></li>
+              </ul>
+            </article>
+            <article class="guide">
+              <h3>Scope reminders</h3>
+              <ul>
+                <li>PathFlow Guard is workflow-support software, not autonomous diagnosis.</li>
+                <li>The Python orchestrator is the current end-to-end executable path.</li>
+                <li>The C++ and Rust components are companion modules and verification targets.</li>
+                <li>The current QC rules are heuristic and should not be described as clinically validated.</li>
+                <li>The Azure portion is scaffolding, not a completed production cloud service.</li>
+              </ul>
+            </article>
+          </div>
+
+          <figure class="asset-figure">
+            <img src="../assets/readme-workspace.svg" alt="PathFlow Guard workspace illustration">
+            <figcaption>
+              The workspace diagram from the repo remains a useful companion to the storage and
+              traceability sections in this manual.
+            </figcaption>
+          </figure>
+        </section>
+
+        <div class="footer">
+          PathFlow Guard manual by GregOrigin. This page is a single-file HTML guide with a left
+          sidebar, inline illustrations, and repo-relative reference links.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const body = document.body;
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.querySelector("[data-sidebar-toggle]");
+      const navLinks = Array.from(document.querySelectorAll(".sidebar-nav a"));
+      const sections = navLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      function setActive(id) {
+        navLinks.forEach(function (link) {
+          link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+        });
+      }
+
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          body.classList.toggle("sidebar-open");
+        });
+      }
+
+      navLinks.forEach(function (link) {
+        link.addEventListener("click", function () {
+          if (window.innerWidth <= 900) {
+            body.classList.remove("sidebar-open");
+          }
+        });
+      });
+
+      const observer = new IntersectionObserver(
+        function (entries) {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; });
+          if (visible.length > 0) {
+            setActive(visible[0].target.id);
+          }
+        },
+        { rootMargin: "-18% 0px -62% 0px", threshold: [0.15, 0.35, 0.6] }
+      );
+
+      sections.forEach(function (section) {
+        observer.observe(section);
+      });
+
+      const initial = window.location.hash ? window.location.hash.slice(1) : (sections[0] && sections[0].id);
+      if (initial) {
+        setActive(initial);
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          body.classList.remove("sidebar-open");
+        }
+      });
+
+      document.addEventListener("click", function (event) {
+        if (
+          window.innerWidth <= 900 &&
+          body.classList.contains("sidebar-open") &&
+          sidebar &&
+          !sidebar.contains(event.target) &&
+          (!toggle || !toggle.contains(event.target))
+        ) {
+          body.classList.remove("sidebar-open");
+        }
+      });
+    }());
+  </script>
+</body>
+</html>

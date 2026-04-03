@@ -1,0 +1,108 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: "Release version to package, without the leading v"
+        required: true
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  windows-release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve release version
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $releaseVersion = "${{ inputs.release_version }}"
+          }
+          else {
+            $releaseVersion = "${{ github.ref_name }}"
+          }
+          $releaseVersion = $releaseVersion.Trim().TrimStart("v")
+          if (-not $releaseVersion) {
+            throw "A release version is required."
+          }
+          "RELEASE_VERSION=$releaseVersion" >> $env:GITHUB_ENV
+          "RELEASE_TAG=v$releaseVersion" >> $env:GITHUB_ENV
+          "RELEASE_DIRNAME=PathFlowGuard-v$releaseVersion-windows-x64" >> $env:GITHUB_ENV
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build release assets
+        shell: pwsh
+        run: .\scripts\build_release.ps1 -Version $env:RELEASE_VERSION -Python "python"
+
+      - name: Optionally sign Windows executable
+        if: ${{ secrets.WINDOWS_CERT_BASE64 != '' && secrets.WINDOWS_CERT_PASSWORD != '' }}
+        shell: pwsh
+        run: |
+          $releaseDir = ".\artifacts\release\$env:RELEASE_DIRNAME"
+          $releaseExe = Join-Path $releaseDir "PathFlowGuard.exe"
+          $assetExe = ".\artifacts\release\$env:RELEASE_DIRNAME.exe"
+          $certPath = Join-Path $env:RUNNER_TEMP "pathflowguard-signing.pfx"
+          [System.IO.File]::WriteAllBytes(
+            $certPath,
+            [System.Convert]::FromBase64String("${{ secrets.WINDOWS_CERT_BASE64 }}")
+          )
+          $signtool = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin" -Recurse -Filter signtool.exe |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1 -ExpandProperty FullName
+          if (-not $signtool) {
+            throw "signtool.exe was not found on the runner."
+          }
+          & $signtool sign `
+            /fd SHA256 `
+            /f $certPath `
+            /p "${{ secrets.WINDOWS_CERT_PASSWORD }}" `
+            /tr http://timestamp.digicert.com `
+            /td SHA256 `
+            $releaseExe
+          Copy-Item -LiteralPath $releaseExe -Destination $assetExe -Force
+
+      - name: Refresh checksums after signing
+        if: ${{ secrets.WINDOWS_CERT_BASE64 != '' && secrets.WINDOWS_CERT_PASSWORD != '' }}
+        shell: pwsh
+        run: |
+          $releaseDir = ".\artifacts\release\$env:RELEASE_DIRNAME"
+          $exePath = ".\artifacts\release\$env:RELEASE_DIRNAME.exe"
+          $zipPath = ".\artifacts\release\$env:RELEASE_DIRNAME.zip"
+          if (Test-Path -LiteralPath $zipPath) {
+            Remove-Item -LiteralPath $zipPath -Force
+          }
+          Compress-Archive -Path $releaseDir -DestinationPath $zipPath -Force
+          $exeHash = Get-FileHash $exePath -Algorithm SHA256
+          $zipHash = Get-FileHash $zipPath -Algorithm SHA256
+          @(
+            "$($exeHash.Hash.ToLower())  $([System.IO.Path]::GetFileName($exePath))"
+            "$($zipHash.Hash.ToLower())  $([System.IO.Path]::GetFileName($zipPath))"
+          ) | Set-Content .\artifacts\release\SHA256SUMS.txt
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pathflowguard-release-assets
+          path: artifacts/release/*
+
+      - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: PathFlow Guard ${{ env.RELEASE_TAG }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          body_path: artifacts/release/RELEASE_NOTES.md
+          files: |
+            artifacts/release/${{ env.RELEASE_DIRNAME }}.exe
+            artifacts/release/${{ env.RELEASE_DIRNAME }}.zip
+            artifacts/release/SHA256SUMS.txt

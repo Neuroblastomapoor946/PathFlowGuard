@@ -1,0 +1,9 @@
+{
+  "case_id": "CASE-2026-101",
+  "slide_id": "SLIDE-101",
+  "site_id": "SITE-EDGE-ALPHA",
+  "objective_power": 40,
+  "file_bytes": 0,
+  "package_path": "../packages/accept-package",
+  "notes": "Expected accept lane sample."
+}

@@ -1,0 +1,4 @@
+scanner=aperio-gt450
+stain=H&E
+operator=tech-04
+

@@ -1,0 +1,59 @@
+<svg width="1200" height="540" viewBox="0 0 1200 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="24" y="24" width="1152" height="492" rx="36" fill="#FAF7EF"/>
+  <text x="66" y="86" fill="#852F14" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="3">END-TO-END FLOW</text>
+  <text x="66" y="134" fill="#162237" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700">How PathFlow Guard executes a job</text>
+
+  <rect x="66" y="194" width="150" height="142" rx="24" fill="#17324C"/>
+  <text x="92" y="236" fill="#EDF5FF" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="700">1. Intake</text>
+  <text x="92" y="270" fill="#C7D8EA" font-family="Segoe UI, Arial, sans-serif" font-size="17">Request JSON</text>
+  <text x="92" y="294" fill="#C7D8EA" font-family="Segoe UI, Arial, sans-serif" font-size="17">Package path</text>
+  <text x="92" y="318" fill="#C7D8EA" font-family="Segoe UI, Arial, sans-serif" font-size="17">Case metadata</text>
+
+  <path d="M216 265H252" stroke="#162237" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="252,265 238,255 238,275" fill="#162237"/>
+
+  <rect x="252" y="194" width="150" height="142" rx="24" fill="#FFF8F3" stroke="#F0D1C4"/>
+  <text x="278" y="236" fill="#852F14" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="700">2. Resolve</text>
+  <text x="278" y="270" fill="#6D594F" font-family="Segoe UI, Arial, sans-serif" font-size="17">Find slide file</text>
+  <text x="278" y="294" fill="#6D594F" font-family="Segoe UI, Arial, sans-serif" font-size="17">Measure bytes</text>
+  <text x="278" y="318" fill="#6D594F" font-family="Segoe UI, Arial, sans-serif" font-size="17">Decide if extract</text>
+
+  <path d="M402 265H438" stroke="#162237" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="438,265 424,255 424,275" fill="#162237"/>
+
+  <rect x="438" y="194" width="150" height="142" rx="24" fill="#EEF6F3" stroke="#D0E6DE"/>
+  <text x="464" y="236" fill="#21725E" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="700">3. Extract</text>
+  <text x="464" y="270" fill="#526A63" font-family="Segoe UI, Arial, sans-serif" font-size="17">Tiles or SVS</text>
+  <text x="464" y="294" fill="#526A63" font-family="Segoe UI, Arial, sans-serif" font-size="17">Focus score</text>
+  <text x="464" y="318" fill="#526A63" font-family="Segoe UI, Arial, sans-serif" font-size="17">Tissue + artifact</text>
+
+  <path d="M588 265H624" stroke="#162237" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="624,265 610,255 610,275" fill="#162237"/>
+
+  <rect x="624" y="194" width="150" height="142" rx="24" fill="#FFF8EB" stroke="#F1DEB8"/>
+  <text x="650" y="236" fill="#AF6A17" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="700">4. Evaluate</text>
+  <text x="650" y="270" fill="#76624A" font-family="Segoe UI, Arial, sans-serif" font-size="17">Thresholds</text>
+  <text x="650" y="294" fill="#76624A" font-family="Segoe UI, Arial, sans-serif" font-size="17">Reason codes</text>
+  <text x="650" y="318" fill="#76624A" font-family="Segoe UI, Arial, sans-serif" font-size="17">Accept / review / reject</text>
+
+  <path d="M774 265H810" stroke="#162237" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="810,265 796,255 796,275" fill="#162237"/>
+
+  <rect x="810" y="194" width="150" height="142" rx="24" fill="#F3F8FF" stroke="#D1E0EE"/>
+  <text x="836" y="236" fill="#17324C" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="700">5. Persist</text>
+  <text x="836" y="270" fill="#607085" font-family="Segoe UI, Arial, sans-serif" font-size="17">Request record</text>
+  <text x="836" y="294" fill="#607085" font-family="Segoe UI, Arial, sans-serif" font-size="17">Manifest JSON</text>
+  <text x="836" y="318" fill="#607085" font-family="Segoe UI, Arial, sans-serif" font-size="17">SQLite job row</text>
+
+  <path d="M960 265H996" stroke="#162237" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="996,265 982,255 982,275" fill="#162237"/>
+
+  <rect x="996" y="194" width="138" height="142" rx="24" fill="#FFF0ED" stroke="#F0C8C1"/>
+  <text x="1022" y="236" fill="#A84231" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="700">6. Route</text>
+  <text x="1022" y="270" fill="#7D5A55" font-family="Segoe UI, Arial, sans-serif" font-size="17">accepted/</text>
+  <text x="1022" y="294" fill="#7D5A55" font-family="Segoe UI, Arial, sans-serif" font-size="17">review/</text>
+  <text x="1022" y="318" fill="#7D5A55" font-family="Segoe UI, Arial, sans-serif" font-size="17">rejected/</text>
+
+  <rect x="66" y="390" width="1068" height="80" rx="22" fill="#FFFFFF" stroke="#E5DED1"/>
+  <text x="96" y="438" fill="#556274" font-family="Segoe UI, Arial, sans-serif" font-size="21">The pipeline is conservative by design: borderline cases go to manual review rather than optimistic auto-acceptance.</text>
+</svg>

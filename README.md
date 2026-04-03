@@ -22,7 +22,7 @@ The repo centers on an executable Python application that screens pathology slid
 > [!IMPORTANT]
 > PathFlow Guard is workflow-support software, not autonomous diagnosis.
 
-**Quick links:** [Illustrated online manual @ GregOrigin](https://gregorigin.com/PathFlowGuard/) | [Architecture](docs/architecture.md) | [Research basis](docs/research.md) | [Software lifecycle](docs/quality/software-lifecycle.md) | [Security](SECURITY.md) | [Contributing](CONTRIBUTING.md) | [Changelog](CHANGELOG.md)
+**Quick links:** [Illustrated HTML manual](docs/site/index.html) | [Architecture](docs/architecture.md) | [Research basis](docs/research.md) | [Software lifecycle](docs/quality/software-lifecycle.md) | [Security](SECURITY.md) | [Contributing](CONTRIBUTING.md) | [Changelog](CHANGELOG.md)
 
 ## Table of contents
 
@@ -353,9 +353,10 @@ Repository role:
 
 Tagged releases are designed to be built through GitHub Actions.
 
+- local release assembly is available through `.\scripts\build_release.ps1 -Version X.Y.Z`
 - CI validates the Python, C++, and Rust code paths on pushes and pull requests
 - the Windows packaging job builds `PathFlowGuard.exe` and smoke-tests the packaged executable
-- the release workflow is intended to upload `PathFlowGuard.exe`, a release zip, and `SHA256SUMS.txt`
+- the release workflow publishes a versioned Windows EXE asset, a versioned ZIP bundle, changelog-backed release notes, and `SHA256SUMS.txt`
 - if signing secrets are configured, the Windows executable can be signed before publication
 
 ## Verification and engineering discipline
@@ -420,6 +421,8 @@ PathFlowGuard2026/
 
 ## Current limitations
 
+This project is stronger when it is honest about scope:
+
 - the current QC metrics are heuristic first-version metrics, not clinically validated production algorithms
 - the local executable path is Python-centered; C++ and Rust are companion components, not the default runtime path yet
 - no real proprietary scanner slide is bundled in the repository, so SVS support is implemented and tested without shipping an actual vendor file
@@ -442,6 +445,6 @@ PathFlowGuard2026/
 
 ## License and security
 
-Researched and created by Andras Gregori @ [GregOrigin.com](https://gregorigin.com/). This repository is licensed under [Apache 2.0](LICENSE).
+This repository is licensed under [Apache-2.0](LICENSE).
 
 Security reports should use GitHub's private vulnerability reporting flow as described in [SECURITY.md](SECURITY.md).

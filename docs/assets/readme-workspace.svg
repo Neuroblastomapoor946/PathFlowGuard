@@ -1,0 +1,36 @@
+<svg width="1200" height="520" viewBox="0 0 1200 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="24" y="24" width="1152" height="472" rx="36" fill="#FAF7EF"/>
+  <text x="66" y="86" fill="#852F14" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="3">WORKSPACE MODEL</text>
+  <text x="66" y="134" fill="#162237" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700">Inspectable on disk, queryable in SQLite</text>
+
+  <rect x="66" y="180" width="370" height="258" rx="28" fill="#17324C"/>
+  <text x="100" y="226" fill="#EDF5FF" font-family="Consolas, monospace" font-size="24" font-weight="700">runtime/</text>
+  <text x="100" y="268" fill="#CAD8E7" font-family="Consolas, monospace" font-size="21">accepted/</text>
+  <text x="100" y="302" fill="#CAD8E7" font-family="Consolas, monospace" font-size="21">review/</text>
+  <text x="100" y="336" fill="#CAD8E7" font-family="Consolas, monospace" font-size="21">rejected/</text>
+  <text x="100" y="370" fill="#CAD8E7" font-family="Consolas, monospace" font-size="21">requests/</text>
+  <text x="100" y="404" fill="#CAD8E7" font-family="Consolas, monospace" font-size="21">manifests/</text>
+  <text x="100" y="438" fill="#CAD8E7" font-family="Consolas, monospace" font-size="21">pathflow_guard.db</text>
+
+  <path d="M436 308H500" stroke="#162237" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="500,308 486,298 486,318" fill="#162237"/>
+
+  <rect x="500" y="180" width="286" height="258" rx="28" fill="#FFF8F3" stroke="#F0D2C6"/>
+  <text x="532" y="226" fill="#852F14" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Stored evidence</text>
+  <text x="532" y="272" fill="#6D594F" font-family="Segoe UI, Arial, sans-serif" font-size="19">Resolved request JSON</text>
+  <text x="532" y="306" fill="#6D594F" font-family="Segoe UI, Arial, sans-serif" font-size="19">BLAKE2b manifest</text>
+  <text x="532" y="340" fill="#6D594F" font-family="Segoe UI, Arial, sans-serif" font-size="19">Routed package copy</text>
+  <text x="532" y="374" fill="#6D594F" font-family="Segoe UI, Arial, sans-serif" font-size="19">Decision and reasons</text>
+  <text x="532" y="408" fill="#6D594F" font-family="Segoe UI, Arial, sans-serif" font-size="19">Audit event payloads</text>
+
+  <path d="M786 308H850" stroke="#162237" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="850,308 836,298 836,318" fill="#162237"/>
+
+  <rect x="850" y="180" width="284" height="258" rx="28" fill="#EEF6F3" stroke="#D0E6DE"/>
+  <text x="882" y="226" fill="#21725E" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Operator surfaces</text>
+  <text x="882" y="272" fill="#526A63" font-family="Segoe UI, Arial, sans-serif" font-size="19">CLI report output</text>
+  <text x="882" y="306" fill="#526A63" font-family="Segoe UI, Arial, sans-serif" font-size="19">Dashboard recent jobs</text>
+  <text x="882" y="340" fill="#526A63" font-family="Segoe UI, Arial, sans-serif" font-size="19">Job detail pages</text>
+  <text x="882" y="374" fill="#526A63" font-family="Segoe UI, Arial, sans-serif" font-size="19">/api/jobs JSON export</text>
+  <text x="882" y="408" fill="#526A63" font-family="Segoe UI, Arial, sans-serif" font-size="19">/healthz status probe</text>
+</svg>

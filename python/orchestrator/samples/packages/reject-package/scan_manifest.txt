@@ -1,0 +1,4 @@
+scanner=leica-at2
+stain=H&E
+operator=tech-09
+

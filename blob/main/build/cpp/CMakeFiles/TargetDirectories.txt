@@ -1,5 +1,0 @@
-G:/1gregorigin/UPWORK REPLIES/PathFlowGuard2026/build/cpp/CMakeFiles/pathflow_qc_core.dir
-G:/1gregorigin/UPWORK REPLIES/PathFlowGuard2026/build/cpp/CMakeFiles/pathflow_qc_core_tests.dir
-G:/1gregorigin/UPWORK REPLIES/PathFlowGuard2026/build/cpp/CMakeFiles/RUN_TESTS.dir
-G:/1gregorigin/UPWORK REPLIES/PathFlowGuard2026/build/cpp/CMakeFiles/ALL_BUILD.dir
-G:/1gregorigin/UPWORK REPLIES/PathFlowGuard2026/build/cpp/CMakeFiles/ZERO_CHECK.dir
