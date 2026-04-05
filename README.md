@@ -15,6 +15,8 @@
 
 # PathFlow Guard
 
+[Watch a tutorial video](https://www.youtube.com/watch?v=YLBA7IhBEK0)
+
 PathFlow Guard is a digital pathology intake and quality-control project built around a practical 2026 problem: too much manual QC, too many avoidable rescans, too much wasted transfer and storage on bad slide packages, and not enough deterministic evidence when an ingest decision needs to be reviewed later.
 
 The repo centers on an executable Python application that screens pathology slide packages before cloud upload, extracts QC metrics from raster tiles or OpenSlide-backed whole-slide images, assigns an `accept`, `review`, or `reject` decision, writes audit artifacts, and stages packages into routed workspace lanes. Around that runnable core, the repository also includes a C++ QC module, a Rust integrity attestor, Azure infrastructure scaffolding, CI/CD, and regulated-development documentation.
